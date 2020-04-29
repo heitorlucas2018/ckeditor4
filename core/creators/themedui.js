@@ -289,6 +289,10 @@ CKEDITOR.replaceClass = 'ckeditor';
 		// WebKit needs to refresh the iframe size to avoid rendering issues. (1/2) (https://dev.ckeditor.com/ticket/8348)
 		contentsFrame && ( contentsFrame.style.width = '1%' );
 
+		if ( typeof height == 'string' ) {
+			height = CKEDITOR.tools.convertToPx( height );
+		}
+
 		// Get the height delta between the outer table and the content area.
 		var contentsOuterDelta = ( outer.$.offsetHeight || 0 ) - ( contents.$.clientHeight || 0 ),
 
@@ -296,7 +300,9 @@ CKEDITOR.replaceClass = 'ckeditor';
 			resultContentsHeight = Math.max( height - ( isContentHeight ? 0 : contentsOuterDelta ), 0 ),
 			resultOuterHeight = ( isContentHeight ? height + contentsOuterDelta : height );
 
-		contents.setStyle( 'height', resultContentsHeight + 'px' );
+		if ( !isNaN( resultContentsHeight ) ) {
+			contents.setStyle( 'height', CKEDITOR.tools.cssLength( resultContentsHeight ) );
+		}
 
 		// WebKit needs to refresh the iframe size to avoid rendering issues. (2/2) (https://dev.ckeditor.com/ticket/8348)
 		contentsFrame && ( contentsFrame.style.width = '100%' );
